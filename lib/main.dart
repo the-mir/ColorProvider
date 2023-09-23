@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'Received_data.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => receiveData(),
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -11,30 +15,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: HomePagestl(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int number = 0;
-
-  void increment() {
-    setState(() {
-      number++;
-      print(number);
-    });
-  }
+class HomePagestl extends StatelessWidget {
+  const HomePagestl({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final providerData= Provider.of<receiveData>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -46,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${number}",
+                "${providerData.number}",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Row(
@@ -54,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      increment();
+                      providerData.increment();
                     },
                     child: Icon(Icons.add),
                   ),
@@ -63,18 +54,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          number = 0;
-                        });
+                        providerData.deletNumber();
                       },
                       child: Icon(Icons.delete)),
                       SizedBox(
                     width: 8,
                   ),
                       ElevatedButton(onPressed: (){
-                        setState(() {
-                          number--;
-                        });
+                        providerData.decrementNumber();
                       }, child: Icon(Icons.remove))
                 ],
               ),
